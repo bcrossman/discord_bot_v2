@@ -14,5 +14,27 @@ module.exports = {
                 });
             }
         }
+		if (message.content.toLowerCase() === 'that was fun') {
+            try {
+                await message.reply('Congratulations on your win!');
+            } catch (error) {
+                console.error(error);
+                await message.reply({
+                    content: "Didn't work!",
+                    ephemeral: true,
+                });
+            }
+        }
+		if (message.content.toLowerCase() === 'hello') {
+            try {
+                await message.reply('Hello Mark!');
+            } catch (error) {
+                console.error(error);
+                await message.reply({
+                    content: "Didn't work!",
+                    ephemeral: true,
+                });
+            }
+        }
     },
 };

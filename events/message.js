@@ -27,7 +27,7 @@ module.exports = {
         }
 		if (message.content.toLowerCase() === 'hello') {
             try {
-                await message.reply('Hello Mark!');
+                await message.reply('Hello!');
             } catch (error) {
                 console.error(error);
                 await message.reply({

@@ -21,17 +21,24 @@ function writeBugStates(states) {
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('bug')
-        .setDescription('Toggles responding with "how are you doing" to a specific user\'s message'),
+        .setDescription('Toggles whether to bug a specific user\'s to play')
+		.addUserOption(option =>
+            option.setName('target')
+                .setDescription('The user to annoy')
+                .setRequired(true)),
     async execute(interaction) {
         if (interaction.commandName === 'bug') {
             if (!interaction.guild) {
                 return await interaction.reply('This command can only be used in a server.');
             }
+			const targetUser = interaction.options.getUser('target');
+			const guildId = interaction.guild.id;
+            const compoundKey = `${guildId}:${targetUser.id}`
             const bugStates = readBugStates();
-            const enabled = bugStates[interaction.guild.id] ?? false;
-            bugStates[interaction.guild.id] = !enabled;
+            const enabled = bugStates[compoundKey] ?? false;
+            bugStates[compoundKey] = !enabled;
             writeBugStates(bugStates);
-            await interaction.reply(`Bug command is now ${enabled ? 'disabled' : 'enabled'}.`);
+            await interaction.reply(`Bug command is now ${enabled ? 'disabled' : 'enabled'} for user ${targetUser.username}.`);
         }
     },
 };

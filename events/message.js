@@ -72,9 +72,12 @@ module.exports = {
                 });
             }
         }
+		const guildId = message.guild.id;
+        const targetUserId = message.author.id;
+        const compoundKey = `${guildId}:${targetUserId}`;
 		const bugStates = readBugStates();
-        const enabled = bugStates[message.guild.id] ?? false;	
-		if (enabled && message.author.id === '705579756380356629') {
+        const enabled = bugStates[compoundKey] ?? false;	
+		if (enabled) {
             try {
                 await message.reply('When are you going to play?');
             } catch (error) {

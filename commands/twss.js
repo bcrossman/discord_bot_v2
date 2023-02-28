@@ -17,6 +17,14 @@ module.exports = {
 		.setName('twss')
 		.setDescription('Replies with TWSS gif!'),
 	async execute(interaction) {
-		await interaction.reply(urls[Math.floor(Math.random() * urls.length)]);
+		if (interaction.commandName === 'twss') {
+			if (interaction.message && interaction.message.reference) {
+				await interaction.deferReply();
+				const message = await interaction.channel.messages.fetch(interaction.message.reference.messageId);
+				await message.reply(urls[Math.floor(Math.random() * urls.length)]);
+			} else {
+				await interaction.reply(urls[Math.floor(Math.random() * urls.length)]);
+			}
+		}
 	},
 };

@@ -28,9 +28,97 @@ function readBugStates() {
 module.exports = {
     name: Events.MessageCreate,
     execute: async function (message) {
-        if (message.content.toLowerCase() === 'gg') {
+		        if (message.content.toLowerCase() === 'gg'&message.author.id==='705579756380356629') {
             try {
-                await message.reply('Do you really mean good game, or is this an attempt to jinx your opponent?');
+                await message.reply("You don't mean that Brent");
+            } catch (error) {
+                console.error(error);
+                await message.reply({
+                    content: "Didn't work!",
+                    ephemeral: true,
+                });
+            }
+        }
+		if (message.content.toLowerCase() === 'gg'&message.author.id==='705570794482302976') { 
+            try {
+                await message.reply("https://giphy.com/gifs/batman-handshake-good-game-LnKxP5wXfSOzudzbPO");
+            } catch (error) {
+                console.error(error);
+                await message.reply({
+                    content: "Didn't work!",
+                    ephemeral: true,
+                });
+            }
+        }
+		if (message.content.toLowerCase() === 'gg'&message.author.id==='705788703716409355') { 
+            try {
+                await message.reply("https://giphy.com/gifs/BookCameo-nacho-libre-big-ed-90-day-fianc-Y4WDXbagwPoepikUdJ");
+            } catch (error) {
+                console.error(error);
+                await message.reply({
+                    content: "Didn't work!",
+                    ephemeral: true,
+                });
+            }
+        }
+		if (message.content.toLowerCase() === 'gg'&message.author.id==='797589470269800468') { 
+            try {
+                await message.reply("https://giphy.com/gifs/3o6EhHGYJF0bvjbbtm");
+            } catch (error) {
+                console.error(error);
+                await message.reply({
+                    content: "Didn't work!",
+                    ephemeral: true,
+                });
+            }
+        }
+		if (message.content.toLowerCase() === 'gg'&message.author.id==='829455735805050950') { 
+            try {
+                await message.reply("https://giphy.com/gifs/RebelRacing-racing-rebel-rebelracing-WQlGmInP2nZFsf11Sy");
+            } catch (error) {
+                console.error(error);
+                await message.reply({
+                    content: "Didn't work!",
+                    ephemeral: true,
+                });
+            }
+        }
+		if (message.content.toLowerCase() === 'gg'&message.author.id==='572953995325341706') { 
+            try {
+                await message.reply("https://giphy.com/gifs/abcnetwork-abc-will-trent-cVIbD5Pe0WwuSYHUhk");
+            } catch (error) {
+                console.error(error);
+                await message.reply({
+                    content: "Didn't work!",
+                    ephemeral: true,
+                });
+            }
+        }
+		if (message.content.toLowerCase() === 'gg'&message.author.id==='702285548227657779') { 
+            try {
+                await message.reply("https://giphy.com/gifs/tomato-pepinillo-tomatillo-6Ane8T5k30AB43upIS");
+            } catch (error) {
+                console.error(error);
+                await message.reply({
+                    content: "Didn't work!",
+                    ephemeral: true,
+                });
+            }
+        }
+		if (message.content.toLowerCase() === 'gg'&message.author.id==='705588216094523422') { 
+            try {
+                await message.reply("https://giphy.com/gifs/TheBoysTV-the-boys-theboys-tv-fA8RJDz7btauMEG9GU");
+            } catch (error) {
+                console.error(error);
+                await message.reply({
+                    content: "Didn't work!",
+                    ephemeral: true,
+                });
+            }
+        }
+		if (message.content.toLowerCase() === 'gg'&message.author.id==='733134435481813012') { 
+            try {
+                await message.reply("https://giphy.com/gifs/big-ben-2Ozjbk786Umdy");
             } catch (error) {
                 console.error(error);
                 await message.reply({
@@ -50,9 +138,9 @@ module.exports = {
                 });
             }
         }
-		if (message.content.toLowerCase() === 'that was fun') {
+		if (message.content.toLowerCase() === "Levi's sucks") {
             try {
-                await message.reply('Congratulations on your win!');
+                await message.reply('https://giphy.com/gifs/Friends-season-6-episode-624-the-one-with-proposal-part-1-Js1ur5v1vmaj4mRxyq');
             } catch (error) {
                 console.error(error);
                 await message.reply({

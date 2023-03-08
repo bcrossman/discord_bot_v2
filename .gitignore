@@ -2,3 +2,4 @@ node_modules
 .env
 config.json
 data/bug-states.json
+data/advance-states.json

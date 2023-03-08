@@ -3,11 +3,11 @@ const { SlashCommandBuilder } = require('discord.js');
 const fs = require('fs');
 const path = require('path');
 
-const filePath = path.join(__dirname, '..', 'data', 'bug-states.json');
+const filePath_bug = path.join(__dirname, '..', 'data', 'bug-states.json');
 
 function readBugStates() {
     try {
-        const data = fs.readFileSync(filePath);
+        const data = fs.readFileSync(filePath_bug);
         return JSON.parse(data);
     } catch (err) {
         return {};
@@ -15,7 +15,7 @@ function readBugStates() {
 }
 
 function writeBugStates(states) {
-    fs.writeFileSync(filePath, JSON.stringify(states, null, 2));
+    fs.writeFileSync(filePath_bug, JSON.stringify(states, null, 2));
 }
 
 module.exports = {

@@ -14,11 +14,30 @@ const urls = [
   'https://giphy.com/gifs/kccougars-milb-kane-county-cougars-yourcougars-5kFJkMhfOnQ02VdkHy'
 ];
 
-const filePath = path.join(__dirname, '..', 'data', 'bug-states.json');
+const filePath_bug = path.join(__dirname, '..', 'data', 'bug-states.json');
+
+function writeBugStates(states) {
+    fs.writeFileSync(filePath_bug, JSON.stringify(states, null, 2));
+}
 
 function readBugStates() {
     try {
-        const data = fs.readFileSync(filePath);
+        const data = fs.readFileSync(filePath_bug);
+        return JSON.parse(data);
+    } catch (err) {
+        return {};
+    }
+}
+
+const filePath_advance = path.join(__dirname, '..', 'data', 'advance-states.json');
+
+function writeAdvanceStates(states) {
+    fs.writeFileSync(filePath_advance, JSON.stringify(states, null, 2));
+}
+
+function readAdvanceStates() {
+    try {
+        const data = fs.readFileSync(filePath_advance);
         return JSON.parse(data);
     } catch (err) {
         return {};
@@ -161,7 +180,25 @@ module.exports = {
             }
         }
 		const guildId = message.guild.id;
-        const targetUserId = message.author.id;
+		const advanceStates = readAdvanceStates();
+		const last_advance = advanceStates[guildId] ?? "1970-01-01T00:00:00.000Z";	
+        const this_advance = message.createdAt.toISOString();
+		const diffInMillis = new Date(this_advance) - new Date(last_advance);
+		const diffInHours = diffInMillis / (1000*60*60);
+		if (message.content === 'Advanced #official') {
+            try {
+				advanceStates[guildId] = this_advance;
+                writeAdvanceStates(advanceStates);
+                await message.reply(`Time since last advance: ${diffInHours.toFixed(2)} hours`);
+            } catch (error) {
+                console.error(error);
+                await message.reply({
+                    content: "Didn't work!",
+                    ephemeral: true,
+                });
+            }
+        }
+		const targetUserId = message.author.id;
         const compoundKey = `${guildId}:${targetUserId}`;
 		const bugStates = readBugStates();
         const enabled = bugStates[compoundKey] ?? false;	

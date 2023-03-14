@@ -35,7 +35,7 @@ module.exports = {
             const diffInDays = diffInMillis / (1000*60*60*24);
             superbowlStates[guildId] = this_superbowl;
             writesuperbowlStates(superbowlStates);
-            await interaction.reply(`Time since last superbowl: ${diffInDays.toFixed(2)} days`);
+            await interaction.reply(`Time since last Superbowl: ${diffInDays.toFixed(2)} days`);
         }
     }
 };

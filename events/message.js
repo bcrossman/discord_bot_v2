@@ -15,29 +15,15 @@ const urls = [
 ];
 
 const filePath_bug = path.join(__dirname, '..', 'data', 'bug-states.json');
-
-function writeBugStates(states) {
-    fs.writeFileSync(filePath_bug, JSON.stringify(states, null, 2));
-}
-
-function readBugStates() {
-    try {
-        const data = fs.readFileSync(filePath_bug);
-        return JSON.parse(data);
-    } catch (err) {
-        return {};
-    }
-}
-
 const filePath_advance = path.join(__dirname, '..', 'data', 'advance-states.json');
 
-function writeAdvanceStates(states) {
-    fs.writeFileSync(filePath_advance, JSON.stringify(states, null, 2));
+function writeStates(states, filePath) {
+    fs.writeFileSync(filePath, JSON.stringify(states, null, 2));
 }
 
-function readAdvanceStates() {
+function readStates(filePath) {
     try {
-        const data = fs.readFileSync(filePath_advance);
+        const data = fs.readFileSync(filePath);
         return JSON.parse(data);
     } catch (err) {
         return {};
@@ -180,7 +166,7 @@ module.exports = {
             }
         }
 		const guildId = message.guild.id;
-		const advanceStates = readAdvanceStates();
+		const advanceStates = readStates(filePath_advance);
 		const last_advance = advanceStates[guildId] ?? "1970-01-01T00:00:00.000Z";	
         const this_advance = message.createdAt.toISOString();
 		const diffInMillis = new Date(this_advance) - new Date(last_advance);
@@ -188,7 +174,7 @@ module.exports = {
 		if (message.content === 'Advanced #official') {
             try {
 				advanceStates[guildId] = this_advance;
-                writeAdvanceStates(advanceStates);
+                writeStates(advanceStates, filePath_advance);
                 await message.reply(`Time since last advance: ${diffInHours.toFixed(2)} hours`);
             } catch (error) {
                 console.error(error);
@@ -200,7 +186,7 @@ module.exports = {
         }
 		const targetUserId = message.author.id;
         const compoundKey = `${guildId}:${targetUserId}`;
-		const bugStates = readBugStates();
+		const bugStates = readStates(filePath_bug);
         const enabled = bugStates[compoundKey] ?? false;	
 		if (enabled) {
             try {

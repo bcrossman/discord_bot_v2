@@ -5,17 +5,17 @@ const path = require('path');
 
 const filePath_superbowl = path.join(__dirname, '..', 'data', 'superbowl-states.json');
 
-function readsuperbowlStates() {
+function readStates(filePath) {
     try {
-        const data = fs.readFileSync(filePath_superbowl);
+        const data = fs.readFileSync(filePath);
         return JSON.parse(data);
     } catch (err) {
         return {};
     }
 }
 
-function writesuperbowlStates(states) {
-    fs.writeFileSync(filePath_superbowl, JSON.stringify(states, null, 2));
+function writeStates(states, filePath) {
+    fs.writeFileSync(filePath, JSON.stringify(states, null, 2));
 }
 
 module.exports = {
@@ -28,13 +28,13 @@ module.exports = {
                 return await interaction.reply('This command can only be used in a server.');
             }
             const guildId = interaction.guild.id;
-            const superbowlStates = readsuperbowlStates();
+            const superbowlStates = readStates(filePath_superbowl);
             const last_superbowl = superbowlStates[guildId] ?? "1970-01-01T00:00:00.000Z";	
             const this_superbowl = interaction.createdAt.toISOString();
             const diffInMillis = new Date(this_superbowl) - new Date(last_superbowl);
             const diffInDays = diffInMillis / (1000*60*60*24);
             superbowlStates[guildId] = this_superbowl;
-            writesuperbowlStates(superbowlStates);
+            writeStates(superbowlStates, filePath_superbowl);
             await interaction.reply(`Time since last Superbowl: ${diffInDays.toFixed(2)} days`);
         }
     }

@@ -5,17 +5,17 @@ const path = require('path');
 
 const filePath_bug = path.join(__dirname, '..', 'data', 'bug-states.json');
 
-function readBugStates() {
+function readStates(filePath) {
     try {
-        const data = fs.readFileSync(filePath_bug);
+        const data = fs.readFileSync(filePath);
         return JSON.parse(data);
     } catch (err) {
         return {};
     }
 }
 
-function writeBugStates(states) {
-    fs.writeFileSync(filePath_bug, JSON.stringify(states, null, 2));
+function writeStates(states, filePath) {
+    fs.writeFileSync(filePath, JSON.stringify(states, null, 2));
 }
 
 module.exports = {
@@ -34,10 +34,10 @@ module.exports = {
 			const targetUser = interaction.options.getUser('target');
 			const guildId = interaction.guild.id;
             const compoundKey = `${guildId}:${targetUser.id}`
-            const bugStates = readBugStates();
+            const bugStates = readStates(filePath_bug);
             const enabled = bugStates[compoundKey] ?? false;
             bugStates[compoundKey] = !enabled;
-            writeBugStates(bugStates);
+            writeStates(bugStates, filePath_bug);
             await interaction.reply(`Bug command is now ${enabled ? 'disabled' : 'enabled'} for user ${targetUser.username}.`);
         }
     },

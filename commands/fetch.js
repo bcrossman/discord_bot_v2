@@ -57,6 +57,7 @@ module.exports = {
             if (!interaction.guild) {
                 return await interaction.reply('This command can only be used in a server.');
             }
+			await interaction.deferReply(); // Acknowledge the interaction and gain more time
 
             const channel = interaction.channel;
 			const messagesArray = await fetchMessages(channel, 10000); // Fetch 500 messages

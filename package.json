@@ -10,10 +10,15 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "canvas": "^2.11.0",
     "chartjs-node-canvas": "^4.1.6",
     "chartjs-plugin-datalabels": "^2.2.0",
+    "csv-parser": "^3.0.0",
+    "d3-cloud": "^1.2.5",
     "discord.js": "^14.7.1",
     "dotenv": "^16.0.3",
-    "quickchart-js": "^3.1.2"
+    "node-wordcloud": "^0.0.2",
+    "quickchart-js": "^3.1.2",
+    "wordcloud": "^1.2.2"
   }
 }

@@ -38,21 +38,56 @@ function createChartConfiguration(labels, data) {
         {
           label: 'Times Played',
           data: data,
-          backgroundColor: 'rgba(75, 192, 192, 0.2)',
+          backgroundColor: 'rgba(75, 192, 192, 0.4)',
           borderColor: 'rgba(75, 192, 192, 1)',
           borderWidth: 1,
         },
       ],
     },
     options: {
+      plugins: {
+        legend: {
+          display: false,
+        },
+      },
       scales: {
         y: {
           beginAtZero: true,
+          ticks: {
+            color: 'white',
+            font: {
+              size: 16,
+            },
+          },
+          grid: {
+            color: 'rgba(0, 0, 0, 0.5)',
+          },
+        },
+        x: {
+          ticks: {
+            color: 'white',
+            font: {
+              size: 16,
+            },
+          },
+          grid: {
+            color: 'rgba(0, 0, 0, 0.5)',
+          },
         },
       },
+      layout: {
+        padding: {
+          top: 10,
+          right: 10,
+          bottom: 10,
+          left: 10,
+        },
+      },
+      backgroundColor: 'white',
     },
   };
 }
+
 
 async function sendBarChart(message, authorKey) {
   const userId = authorKey
@@ -95,7 +130,7 @@ module.exports = {
     execute: async function (message) {
 		        if (message.content.toLowerCase() === 'gg'&message.author.id==='705579756380356629') {
             try {
-                await message.reply("You don't mean that Brent");
+                await message.reply("https://giphy.com/gifs/theoffice-4wnrJ7cWFluAZVkHBU");
             } catch (error) {
                 console.error(error);
                 await message.reply({
@@ -106,7 +141,7 @@ module.exports = {
         }
 		if (message.content.toLowerCase() === 'gg'&message.author.id==='705570794482302976') { 
             try {
-                await message.reply("https://giphy.com/gifs/batman-handshake-good-game-LnKxP5wXfSOzudzbPO");
+                await message.reply("https://giphy.com/gifs/thumbs-up-maybe-joaquin-phoenix-FX3OLJAUhOZNK");
             } catch (error) {
                 console.error(error);
                 await message.reply({
@@ -117,7 +152,7 @@ module.exports = {
         }
 		if (message.content.toLowerCase() === 'gg'&message.author.id==='705788703716409355') { 
             try {
-                await message.reply("https://giphy.com/gifs/BookCameo-nacho-libre-big-ed-90-day-fianc-Y4WDXbagwPoepikUdJ");
+                await message.reply("https://giphy.com/gifs/good-game-hard-barely-win-jRHuBqNdkuWFMIX3Pi");
             } catch (error) {
                 console.error(error);
                 await message.reply({
@@ -128,7 +163,7 @@ module.exports = {
         }
 		if (message.content.toLowerCase() === 'gg'&message.author.id==='797589470269800468') { 
             try {
-                await message.reply("https://giphy.com/gifs/3o6EhHGYJF0bvjbbtm");
+                await message.reply("https://giphy.com/gifs/gg-red-panda-good-game-qRDbkDBwxTqfF9MGTm");
             } catch (error) {
                 console.error(error);
                 await message.reply({
@@ -139,7 +174,7 @@ module.exports = {
         }
 		if (message.content.toLowerCase() === 'gg'&message.author.id==='829455735805050950') { 
             try {
-                await message.reply("https://giphy.com/gifs/RebelRacing-racing-rebel-rebelracing-WQlGmInP2nZFsf11Sy");
+                await message.reply("https://giphy.com/gifs/redbull-streetfighter-gachi-kun-gachikun-8PEfCbYgGzpIBsYNo7");
             } catch (error) {
                 console.error(error);
                 await message.reply({
@@ -150,7 +185,7 @@ module.exports = {
         }
 		if (message.content.toLowerCase() === 'gg'&message.author.id==='572953995325341706') { 
             try {
-                await message.reply("https://giphy.com/gifs/abcnetwork-abc-will-trent-cVIbD5Pe0WwuSYHUhk");
+                await message.reply("https://tenor.com/baMeD.gif");
             } catch (error) {
                 console.error(error);
                 await message.reply({
@@ -161,7 +196,7 @@ module.exports = {
         }
 		if (message.content.toLowerCase() === 'gg'&message.author.id==='702285548227657779') { 
             try {
-                await message.reply("https://giphy.com/gifs/tomato-pepinillo-tomatillo-6Ane8T5k30AB43upIS");
+                await message.reply("https://media.giphy.com/media/n4IQ67uRDEml2/giphy.gif");
             } catch (error) {
                 console.error(error);
                 await message.reply({
@@ -172,7 +207,7 @@ module.exports = {
         }
 		if (message.content.toLowerCase() === 'gg'&message.author.id==='705588216094523422') { 
             try {
-                await message.reply("https://giphy.com/gifs/TheBoysTV-the-boys-theboys-tv-fA8RJDz7btauMEG9GU");
+                await message.reply("https://tenor.com/bEWLd.gif");
             } catch (error) {
                 console.error(error);
                 await message.reply({
@@ -183,7 +218,7 @@ module.exports = {
         }
 		if (message.content.toLowerCase() === 'gg'&message.author.id==='733134435481813012') { 
             try {
-                await message.reply("https://giphy.com/gifs/big-ben-2Ozjbk786Umdy");
+                await message.reply("https://giphy.com/gifs/eunitedgg-legion-eunited-legiqn-JQcyE2EB0klfJvHVbn");
             } catch (error) {
                 console.error(error);
                 await message.reply({

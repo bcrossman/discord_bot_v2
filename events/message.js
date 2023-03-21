@@ -265,7 +265,8 @@ module.exports = {
 				});
 			  }
 			}
-		if (message.content.toLowerCase() === "Levi's sucks") {
+			
+		if (message.content.toLowerCase() === "levi's sucks") {
             try {
                 await message.reply('https://giphy.com/gifs/Friends-season-6-episode-624-the-one-with-proposal-part-1-Js1ur5v1vmaj4mRxyq');
             } catch (error) {

@@ -10,3 +10,10 @@ data/messages.csv
 data/wordcloud.png
 data/player_data.csv
 data/advance-states.json
+*.pper
+.Rproj.user/DC54DF37/persistent-state
+.Rproj.user/DC54DF37/rmd-outputs
+.Rproj.user/*
+*.Rproj
+data/advance-states.json
+data/scout_player.png

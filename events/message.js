@@ -125,6 +125,20 @@ function readStates(filePath) {
     }
 }
 
+function calculateAverageTimeBetweenAdvances(advances) {
+    if (advances.length < 2) {
+        return 0;
+    }
+
+    let totalTime = 0;
+
+    for (let i = 1; i < advances.length; i++) {
+        totalTime += new Date(advances[i]) - new Date(advances[i - 1]);
+    }
+
+    return totalTime / (advances.length - 1);
+}
+
 module.exports = {
     name: 'messageCreate',
     execute: async function (message) {
@@ -289,16 +303,27 @@ module.exports = {
             }
         }
 		const guildId = message.guild.id;
+		const this_advance = message.createdAt.toISOString();
 		const advanceStates = readStates(filePath_advance);
-		const last_advance = advanceStates[guildId] ?? "1970-01-01T00:00:00.000Z";	
-        const this_advance = message.createdAt.toISOString();
+		const advances = Array.isArray(advanceStates[guildId]) ? advanceStates[guildId] : [];
+		const last_advance = advances.length > 0 ? advances[advances.length - 1] : "1970-01-01T00:00:00.000Z";
 		const diffInMillis = new Date(this_advance) - new Date(last_advance);
 		const diffInHours = diffInMillis / (1000*60*60);
 		if (message.content === 'Advanced #official') {
-            try {
-				advanceStates[guildId] = this_advance;
-                writeStates(advanceStates, filePath_advance);
-                await message.reply(`Time since last advance: ${diffInHours.toFixed(2)} hours`);
+			try {
+			advances.push(this_advance);
+			
+			if (advances.length > 10) {
+				advances.shift();
+			}
+
+			advanceStates[guildId] = advances;
+			writeStates(advanceStates, filePath_advance);
+
+			const averageTimeInMillis = calculateAverageTimeBetweenAdvances(advances);
+			const averageTimeInHours = averageTimeInMillis / (1000 * 60 * 60);
+
+			await message.reply(`Time since last advance: ${diffInHours.toFixed(2)} hours\nAverage time between the last 10 advances: ${averageTimeInHours.toFixed(2)} hours`);
             } catch (error) {
                 console.error(error);
                 await message.reply({

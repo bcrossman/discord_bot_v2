@@ -12,6 +12,22 @@ library(tidyverse)
 library(tidytext)
 
 player_data <- read_csv("./data/player_data.csv")
+# %>% 
+#   mutate(awareness_rating = awareRating + playRecRating,
+#          strength_rating = strengthRating + weight,
+#          speed_rating = accelRating + speedRating,
+#          agility_rating = changeOfDirectionRating + agilityRating,
+#          carry_rating = breakTackleRating + carryRating,
+#          rush_finesse_rating = blockShedRating+finesseMovesRating,
+#          rush_power_rating = blockShedRating+powerMovesRating,
+#          big_hitter_rating = hitPowerRating,
+#          zone_rating = zoneCoverRating,
+#          man_rating = manCoverRating,
+#          tall_rating = jumpRating+height,
+#          kick_rating = kickPowerRating+kickAccRating,
+#          run_block_agile_rating = runBlockFinesseRating,
+#          run_block_power_rating = runBlockPowerRating,
+#          )
 
 vec = c("QB",1, "RG",1, "LG", 1, "C", 1, "LT", 1, "RT", 1, "LE", 1, "RE", 1, "DT", 1, "LOLB", 1,
         "ROLB", 1, "MLB", 2, "SS", 1, "FS", 1, "CB", 2, "WR", 3, "TE", 2, "HB", 1, "K", 1, "P", 1, "FB", 1)

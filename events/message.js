@@ -163,7 +163,7 @@ module.exports = {
         }
 		if (message.content.toLowerCase() === 'gg'&message.author.id==='797589470269800468') { 
             try {
-                await message.reply("https://giphy.com/gifs/gg-red-panda-good-game-qRDbkDBwxTqfF9MGTm");
+                await message.reply("https://giphy.com/gifs/A1eSports-good-game-ggwp-well-played-bmr28cfgGWGV7CdalB");
             } catch (error) {
                 console.error(error);
                 await message.reply({
@@ -185,7 +185,7 @@ module.exports = {
         }
 		if (message.content.toLowerCase() === 'gg'&message.author.id==='572953995325341706') { 
             try {
-                await message.reply("https://tenor.com/baMeD.gif");
+                await message.reply("https://giphy.com/gifs/theoffice-the-office-tv-weight-loss-part-2-fah08IDMr10VtDrcoh");
             } catch (error) {
                 console.error(error);
                 await message.reply({
@@ -207,7 +207,7 @@ module.exports = {
         }
 		if (message.content.toLowerCase() === 'gg'&message.author.id==='705588216094523422') { 
             try {
-                await message.reply("https://tenor.com/bEWLd.gif");
+                await message.reply("https://giphy.com/gifs/handshake-good-game-nicely-done-JQGVOMyW49z25ZpTw0");
             } catch (error) {
                 console.error(error);
                 await message.reply({

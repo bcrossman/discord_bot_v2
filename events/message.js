@@ -2,6 +2,8 @@ const { Discord } = require('discord.js');
 const { ChartJSNodeCanvas } = require('chartjs-node-canvas');
 const fs = require('fs');
 const path = require('path');
+const config = require('../config.json');
+
 
 const urls = [
   'https://giphy.com/gifs/theoffice-the-office-tv-a-benihana-christmas-IjJ8FVe4HVk66yvlV2',
@@ -18,6 +20,23 @@ const urls = [
 const filePath_bug = path.join(__dirname, '..', 'data', 'bug-states.json');
 const filePath_advance = path.join(__dirname, '..', 'data', 'advance-states.json');
 const filePath_played = path.join(__dirname, '..', 'data', 'played-states.json');
+
+const axios = require("axios"); // Install Axios using npm install axios
+
+async function getRandomGifUrl(keyword) {
+    try {
+        const apiKey = config.giphyApiKey;
+        const response = await axios.get(`https://api.giphy.com/v1/gifs/search?api_key=${apiKey}&q=${keyword}&limit=50`);
+        
+        const gifs = response.data.data;
+        const randomGif = gifs[Math.floor(Math.random() * gifs.length)];
+        
+        return randomGif.url;
+    } catch (error) {
+        console.error(error);
+        return null;
+    }
+}
 
 function getHoursCount(times) {
   const hoursCount = new Array(24).fill(0);
@@ -142,7 +161,26 @@ function calculateAverageTimeBetweenAdvances(advances) {
 module.exports = {
     name: 'messageCreate',
     execute: async function (message) {
-		        if (message.content.toLowerCase() === 'gg'&message.author.id==='705579756380356629') {
+		if (message.content.toLowerCase() === 'gg') {
+    try {
+        const gifUrl = await getRandomGifUrl("good game"); // Replace with your keyword
+        if (gifUrl) {
+            await message.reply(gifUrl);
+        } else {
+            await message.reply({
+                content: "Didn't work!",
+                ephemeral: true,
+            });
+        }
+    } catch (error) {
+        console.error(error);
+        await message.reply({
+            content: "Didn't work!",
+            ephemeral: true,
+        });
+    }
+}
+/* 		        if (message.content.toLowerCase() === 'gg'&message.author.id==='705579756380356629') {
             try {
                 await message.reply("https://giphy.com/gifs/theoffice-4wnrJ7cWFluAZVkHBU");
             } catch (error) {
@@ -188,7 +226,7 @@ module.exports = {
         }
 		if (message.content.toLowerCase() === 'gg'&message.author.id==='829455735805050950') { 
             try {
-                await message.reply("https://giphy.com/gifs/redbull-streetfighter-gachi-kun-gachikun-8PEfCbYgGzpIBsYNo7");
+                await message.reply("https://giphy.com/gifs/handshake-good-game-nicely-done-JQGVOMyW49z25ZpTw0");
             } catch (error) {
                 console.error(error);
                 await message.reply({
@@ -210,7 +248,7 @@ module.exports = {
         }
 		if (message.content.toLowerCase() === 'gg'&message.author.id==='702285548227657779') { 
             try {
-                await message.reply("https://media.giphy.com/media/n4IQ67uRDEml2/giphy.gif");
+                await message.reply("https://giphy.com/gifs/reaction-wMsD35WIjjUFq");
             } catch (error) {
                 console.error(error);
                 await message.reply({
@@ -240,10 +278,39 @@ module.exports = {
                     ephemeral: true,
                 });
             }
+        } */
+	if (message.content.toLowerCase() === 'twss') {
+    try {
+        const gifUrl = await getRandomGifUrl("twss"); // Replace with your keyword
+        if (gifUrl) {
+            await message.reply(gifUrl);
+        } else {
+            await message.reply({
+                content: "Didn't work!",
+                ephemeral: true,
+            });
         }
-		if (message.content.toLowerCase() === 'twss') {
-            try {
-                await message.reply(urls[Math.floor(Math.random() * urls.length)]);
+    } catch (error) {
+        console.error(error);
+        await message.reply({
+            content: "Didn't work!",
+            ephemeral: true,
+        });
+    }
+}
+		
+		if (message.content.toLowerCase().includes('is madden out yet')) {
+			const currentDate = new Date();
+			const maddenReleaseDate = new Date(currentDate.getFullYear(), 7, 15); // August 15th (Month is 0-indexed, so 7 is August)
+			const timeDifference = maddenReleaseDate - currentDate;
+			const daysDifference = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
+			    try {
+        const funnyReply = `Madden release countdown: 🏈🎮 ${daysDifference} ${
+            daysDifference === 1
+                ? "day left! It's almost game time, baby!"
+                : `days left! Hang in there, champ!.`
+        }`;
+        await message.reply(funnyReply);
             } catch (error) {
                 console.error(error);
                 await message.reply({

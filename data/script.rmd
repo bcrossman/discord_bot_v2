@@ -1,0 +1,74 @@
+---
+title: "Play Times"
+author: "BC"
+date:   " `r Sys.time()` "
+output:
+  html_document:
+    theme: cerulean
+    highlight: haddock
+    toc: true
+    toc_depth: 5
+    toc_float: true
+    self_contained: true
+    collapsed: FALSE
+    df_print: paged
+    code_download: true
+    code_folding: hide
+---
+
+## Introduction
+
+
+```{r setup, message=FALSE, warning=FALSE}
+
+
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(warning = FALSE)
+knitr::opts_chunk$set(message = FALSE)
+
+library(tidyverse)
+library(lubridate)
+library(jsonlite)
+
+display_table <- function(x){
+  table_output <- 
+    DT::datatable(as.data.frame(x),
+                  extensions = 'Buttons',
+                  
+                  options = list(
+                    dom = 'Bfrtip',
+                    buttons = list(
+                      list(extend = 'collection',
+                           buttons = c('excel', 'csv'),
+                           text = 'DOWNLOAD DATA')
+                    )
+                  )) 
+  
+  table_output
+}
+
+```
+
+```{r}
+
+json_data <- fromJSON("played-states.json")
+df <- json_data %>%
+  enframe(name = "name", value = "date_time") %>%
+  unnest(date_time) %>%
+  mutate(date_time = mdy_hms(date_time)) %>% 
+  filter(!(name %in% c("705579756380356629", "test")))
+
+df_hourly <- df %>%
+  mutate(hour = hour(date_time)) %>%
+  group_by(name, hour) %>%
+  count() %>%
+  ungroup()
+
+ggplot(df_hourly, aes(x = factor(hour), y = n, fill = name)) +
+  geom_bar(stat = "identity") +
+  labs(x = "Hour", y = "Count of Games Played", title = "Games Played by Hour") +
+  # scale_x_discrete(limits = 1:24, labels = 1:24) +
+  theme_minimal()
+
+```
+

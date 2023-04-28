@@ -304,21 +304,29 @@ module.exports = {
 			const maddenReleaseDate = new Date(currentDate.getFullYear(), 7, 15); // August 15th (Month is 0-indexed, so 7 is August)
 			const timeDifference = maddenReleaseDate - currentDate;
 			const daysDifference = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
-			    try {
-        const funnyReply = `Madden release countdown: 🏈🎮 ${daysDifference} ${
-            daysDifference === 1
-                ? "day left! It's almost game time, baby!"
-                : `days left! Hang in there, champ!.`
-        }`;
-        await message.reply(funnyReply);
-            } catch (error) {
-                console.error(error);
-                await message.reply({
-                    content: "Didn't work!",
-                    ephemeral: true,
-                });
-            }
-        }
+
+			try {
+				let replyMessage;
+
+				if (daysDifference <= 0) {
+					replyMessage = "Yes, Madden is already out! 🏈🎮 Time to get your game on!";
+				} else {
+					replyMessage = `Madden release countdown: 🏈🎮 ${daysDifference} ${
+						daysDifference === 1
+							? "day left! It's almost game time, baby!"
+							: `days left! Hang in there, champ!`
+					}`;
+				}
+
+				await message.reply(replyMessage);
+			} catch (error) {
+				console.error(error);
+				await message.reply({
+					content: "Didn't work!",
+					ephemeral: true,
+				});
+			}
+		}
 		if (message.content.toLowerCase().includes('is live over at')) {
 			  try {
 				const playedStates = readStates(filePath_played);

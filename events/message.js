@@ -309,15 +309,10 @@ module.exports = {
 				let replyMessage;
 
 				if (daysDifference <= 0) {
-					replyMessage = "Yes, Madden is already out! 🏈🎮 Time to get your game on!";
+					replyMessage = "Well, well, well, isn't this just fan-fcking-tastic? Madden's finally out, as if we haven't had enough of that shtshow already. Get ready for more overpriced mediocrity, folks. But hey, let's not let that stop us from wasting our precious time, right? Game on, I guess.";
 				} else {
-					replyMessage = `Madden release countdown: 🏈🎮 ${daysDifference} ${
-						daysDifference === 1
-							? "day left! It's almost game time, baby!"
-							: `days left! Hang in there, champ!`
-					}`;
+					replyMessage = `Hey, ${daysDifference} more fucking days until Madden's dropping alright? So don't get your panties in a twist just yet.`;
 				}
-
 				await message.reply(replyMessage);
 			} catch (error) {
 				console.error(error);

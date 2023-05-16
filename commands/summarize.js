@@ -122,7 +122,7 @@ module.exports = {
         if (interaction.commandName === 'summarize') {
 			await interaction.deferReply(); // Acknowledge the interaction and gain more time
 			const channel = interaction.channel;
-            const messagesArray = await fetchMessages(channel, 1000); // Fetch 1000 messages
+            const messagesArray = await fetchMessages(channel, 500); // Fetch 500 messages
             const csvData = messagesToCSV(messagesArray);
             writeMessages(csvData, filePath_messages);
             const text = await extractTextFromCSV(filePath_messages);

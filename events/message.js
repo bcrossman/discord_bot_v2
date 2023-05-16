@@ -4,19 +4,6 @@ const fs = require('fs');
 const path = require('path');
 const config = require('../config.json');
 
-
-const urls = [
-  'https://giphy.com/gifs/theoffice-the-office-tv-a-benihana-christmas-IjJ8FVe4HVk66yvlV2',
-  'https://giphy.com/gifs/funny-thats-what-she-said-IJLVLpZQuS4z6',
-  'https://giphy.com/gifs/the-office-steve-carell-michael-scott-elPYgmQ506HK0',
-  'https://giphy.com/gifs/NaqFWnnLebY4M',
-  'https://giphy.com/gifs/theoffice-Zgo2A2oOpbGhQdf09T',
-  'https://giphy.com/gifs/victorypointssocial-i-agree-what-she-said-tracey-matney-2ONjoz6NEtXQonnaE2',
-  'https://giphy.com/gifs/kccougars-milb-kane-county-cougars-yourcougars-5kFJkMhfOnQ02VdkHy',
-  'https://giphy.com/gifs/theoffice-episode-1-the-office-tv-esR1eKgmOnxWKR627f',
-  'https://giphy.com/gifs/kccougars-milb-kane-county-cougars-yourcougars-5kFJkMhfOnQ02VdkHy'
-];
-
 const filePath_bug = path.join(__dirname, '..', 'data', 'bug-states.json');
 const filePath_advance = path.join(__dirname, '..', 'data', 'advance-states.json');
 const filePath_played = path.join(__dirname, '..', 'data', 'played-states.json');

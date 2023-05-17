@@ -63,6 +63,7 @@ function messagesToCSV(messages) {
     const header = 'Author,Date,Message\n';
     const rows = messages
         .filter(message => message.author.username !== "Brent's Annoying Madden Bot")
+		.filter(message => message.author.username !== "Pingcord")
         .map(message => `"${message.author.username}",${message.createdAt.toISOString()},"${message.content.replace(/"/g, '""')}"`)
         .join('\n');
     return header + rows;
@@ -105,13 +106,18 @@ async function generateSummary(text) {
         {"role": "assistant", "content": `The chat export is: ${text}`},
         {"role": "user", "content": "Can you summarize what each Author said in this chat from my Madden league in discord?"}
     ];
-// console.log(messages)
-    const response = await openai.createChatCompletion({
-        model: "gpt-3.5-turbo",
-        messages: messages,
-    });
 
-    return response.data.choices[0].message.content;
+    try {
+        const response = await openai.createChatCompletion({
+            model: "gpt-3.5-turbo",
+            messages: messages,
+        });
+
+        return response.data.choices[0].message.content;
+    } catch (error) {
+        console.error('Error occurred:', error.response.data.error);
+        throw error; // you can throw the error to be handled upstream
+    }
 }
 
 module.exports = {
@@ -120,16 +126,22 @@ module.exports = {
         .setDescription('Summarizes the last 24 hour of messages on the server'),
     async execute(interaction) {
         if (interaction.commandName === 'summarize') {
-			await interaction.deferReply(); // Acknowledge the interaction and gain more time
-			const channel = interaction.channel;
-            const messagesArray = await fetchMessages(channel, 500); // Fetch 500 messages
-            const csvData = messagesToCSV(messagesArray);
-            writeMessages(csvData, filePath_messages);
-            const text = await extractTextFromCSV(filePath_messages);
-			// const truncatedText = truncateText(text, 2000); // GPT-3.5-turbo model has a limit of 4096 tokens
-			const summary = await generateSummary(text);
+			try {
+				await interaction.deferReply(); // Acknowledge the interaction and gain more time
+				const channel = interaction.channel;
+				const messagesArray = await fetchMessages(channel, 500); // Fetch 500 messages
+				const csvData = messagesToCSV(messagesArray);
+				writeMessages(csvData, filePath_messages);
+				const text = await extractTextFromCSV(filePath_messages);
+				// const truncatedText = truncateText(text, 2000); // GPT-3.5-turbo model has a limit of 4096 tokens
+				const summary = await generateSummary(text);
 
-            await interaction.editReply(`Summary: ${summary}`);
+				await interaction.editReply(`Summary: ${summary}`);
+			} catch (error) {
+				// Handle error
+				console.error('An error occurred:', error);
+				await interaction.editReply('An error occurred while generating the summary. Please try again later.');
+			}
         }
     }
 };

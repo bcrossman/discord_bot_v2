@@ -87,7 +87,7 @@ async function extractTextFromCSV(csvPath) {
         }
     }
 
-    const oneDayAgo = mostRecentMessageTime.subtract(1, 'day');
+    const oneDayAgo = mostRecentMessageTime.subtract(6, 'hours');
 
     for(let i = 1; i < data.length; i++) {  // skip the first row
         const row = data[i];
@@ -104,7 +104,7 @@ async function generateSummary(text) {
     const messages = [
         {"role": "system", "content": "You are a helpful assistant."},
         {"role": "assistant", "content": `The chat export is: ${text}`},
-        {"role": "user", "content": "Can you summarize what each Author said in this chat from my Madden league in discord?"}
+        {"role": "user", "content": "For each Author, provide a detailed, multi-sentence summary of their contributions to the chat for my madden league in discord. Please also provide an overall summary of the chat at the end. Make sure not to duplicate Authors."}
     ];
 
     try {

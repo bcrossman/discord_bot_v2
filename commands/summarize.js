@@ -69,7 +69,7 @@ function messagesToCSV(messages) {
     return header + rows;
 }
 
-async function extractTextFromCSV(csvPath) {
+async function extractTextFromCSV(csvPath, hours) {
     let text = "";
     let mostRecentMessageTime = null;
 
@@ -87,7 +87,7 @@ async function extractTextFromCSV(csvPath) {
         }
     }
 
-    const oneDayAgo = mostRecentMessageTime.subtract(6, 'hours');
+    const oneDayAgo = mostRecentMessageTime.subtract(hours, 'hours');
 
     for(let i = 1; i < data.length; i++) {  // skip the first row
         const row = data[i];
@@ -123,20 +123,28 @@ async function generateSummary(text) {
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('summarize')
-        .setDescription('Summarizes the last 24 hour of messages on the server'),
+        .setDescription('Summarizes the last n hours of messages on the server')
+        .addIntegerOption(option => 
+            option.setName('hours')
+                .setDescription('The number of hours to summarize')
+                .setRequired(true)
+        ),
     async execute(interaction) {
         if (interaction.commandName === 'summarize') {
 			try {
 				await interaction.deferReply(); // Acknowledge the interaction and gain more time
 				const channel = interaction.channel;
-				const messagesArray = await fetchMessages(channel, 500); // Fetch 500 messages
+				const hours = interaction.options.getInteger('hours');
+				// Use the number of hours to determine how many messages to fetch
+				// This part depends on your implementation of the fetchMessages function
+				// Here's an example assuming you fetch 20 messages per hour
+				const messagesArray = await fetchMessages(channel, hours * 20); 
 				const csvData = messagesToCSV(messagesArray);
 				writeMessages(csvData, filePath_messages);
-				const text = await extractTextFromCSV(filePath_messages);
-				// const truncatedText = truncateText(text, 2000); // GPT-3.5-turbo model has a limit of 4096 tokens
+				const text = await extractTextFromCSV(filePath_messages, hours);
 				const summary = await generateSummary(text);
 
-				await interaction.editReply(`Summary: ${summary}`);
+				await interaction.editReply(`Summary for the last ${hours} hours: ${summary}`);
 			} catch (error) {
 				// Handle error
 				console.error('An error occurred:', error);

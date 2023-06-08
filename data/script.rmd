@@ -72,3 +72,91 @@ ggplot(df_hourly, aes(x = factor(hour), y = n, fill = name)) +
 
 ```
 
+```{r}
+library(reshape2)
+library(corrr)
+
+# assuming df_hourly is your dataframe
+
+# reshape data to wide format
+df_wide <- df_hourly %>% 
+  filter(name != "babobeavers") %>% 
+  mutate(hour = case_when(
+    hour >= 5 & hour <= 8 ~ "Morning",
+    hour >= 9 & hour <= 16 ~ "Work Day",
+    hour >= 17 & hour <= 21 ~ "Night",
+    hour >= 22 & hour <= 23 ~ "Late Night",
+    hour >= 0 & hour <= 4 ~ "Late Night",
+    TRUE ~ as.character(hour)
+  )) %>%
+  mutate(hour = factor(hour, levels = c("Morning", "Work Day", "Night", "Late Night"))) %>% 
+  group_by(name,hour) %>% 
+  summarise(n = sum(n)) %>% 
+  group_by(name) %>% 
+  mutate(n = n / sum(n)) %>% 
+  pivot_wider(names_from = "name", values_from = "n", values_fill = 0)
+
+# calculate correlation matrix
+cor_matrix <- df_wide %>% 
+    select(-hour) %>%  # assuming 'hour' is your time variable
+    correlate()
+
+library(corrplot)
+
+# assuming cor_matrix is your correlation matrix
+# plot the correlation matrix
+
+cor_mat <- as.matrix(cor_matrix[,-1])
+
+rownames(cor_mat) <- cor_matrix$term
+
+corrplot(cor_mat, method="color", 
+         order="hclust", 
+         addCoef.col = "black", # Add correlation coefficient on the plot
+         tl.col="black", tl.srt=45) # Text label color and rotation
+
+
+dist_matrix <- proxy::dist(t(df_wide[,-1]), method = "Euclidean")
+
+kmeans_result <- kmeans(dist_matrix, centers = 4)
+clusters <- kmeans_result$cluster
+mds_result <- cmdscale(dist_matrix)
+mds_scores <- as.data.frame(mds_result)
+mds_scores_with_clusters <- cbind(mds_scores, Cluster = factor(clusters))
+
+ggplot(data = mds_scores_with_clusters, aes(x = V1, y = V2, color = Cluster)) +
+  geom_point() +
+  theme_minimal() +
+  labs(x = "Dimension 1", y = "Dimension 2", title = "MDS with K-means Clustering") +
+  scale_color_discrete(name = "Cluster") +
+  geom_text_repel(aes(label = colnames(df_wide[,-1])))
+
+#PCA
+pca_result <- prcomp(t(df_wide[,-1]), scale. = TRUE)
+
+scores <- as.data.frame(pca_result$x)
+
+ggplot(data = scores, aes(x = PC1, y = PC2)) +
+  geom_point() +
+  theme_minimal() +
+  labs(x = "Principal Component 1", y = "Principal Component 2", title = "PCA on distributions") +
+  geom_text_repel(aes(label = colnames(df_wide[,-1])))
+
+kmeans_result <- kmeans(t(df_wide[,-1]), centers = 4)
+
+clusters <- kmeans_result$cluster
+
+pca_result <- prcomp(t(df_wide[,-1]), scale. = TRUE)
+scores <- as.data.frame(pca_result$x)
+
+scores_with_clusters <- cbind(scores, Cluster = factor(clusters))
+
+ggplot(data = scores_with_clusters, aes(x = PC1, y = PC2, color = Cluster)) +
+  geom_point() +
+  theme_minimal() +
+  labs(x = "Principal Component 1", y = "Principal Component 2", title = "PCA with K-means Clustering") +
+  scale_color_discrete(name = "Cluster") +
+  geom_text_repel(aes(label = colnames(df_wide[,-1])))
+
+```
+

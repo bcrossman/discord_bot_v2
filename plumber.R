@@ -61,7 +61,7 @@ important_var_df <-
   player_num %>% 
   group_nest(position) %>% 
   mutate(data = map(data,  ~map(.x %>% select(-playerBestOvr), cor.test, y = .x$playerBestOvr) %>% 
-                      map_dfr(tidy, .id = "predictor"))) %>% 
+                      map_dfr(broom::tidy, .id = "predictor"))) %>% 
   unnest(cols = data) %>% 
   group_by(position) %>% 
   filter(estimate<.99) %>% 

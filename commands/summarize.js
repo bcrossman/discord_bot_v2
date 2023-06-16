@@ -104,7 +104,7 @@ async function generateSummary(text) {
     const messages = [
         {"role": "system", "content": "You are a helpful assistant."},
         {"role": "assistant", "content": `The chat export is: ${text}`},
-        {"role": "user", "content": "For each Author, provide a detailed, multi-sentence summary of their contributions to the chat for my madden league in discord. Please also provide an overall summary of the chat at the end. Make sure not to duplicate Authors."}
+        {"role": "user", "content": "For each Author, provide a detailed, bullet pointed, multi-sentence summary of their contributions to the chat for my madden league in discord. Please also provide an overall summary of the chat at the end. Make sure not to duplicate Authors."}
     ];
 
     try {

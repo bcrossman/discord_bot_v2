@@ -1,6 +1,8 @@
 const { SlashCommandBuilder } = require('discord.js');
 const fs = require('fs');
 const path = require('path');
+const { EmbedBuilder } = require('discord.js');
+
 const moment = require('moment-timezone');  // Make sure to install this library
 
 const filePath_advance = path.join(__dirname, '..', 'data', 'advance-states.json');
@@ -60,21 +62,36 @@ module.exports = {
 
         // Determine users who haven't played since the last advance
         const usersNotPlayed = userIds.filter(userId => !usersPlayedAfterLastAdvance.includes(userId));
+		const embed = new EmbedBuilder()
+			.setTitle("Played Status")
+			.setColor("#0099ff")  // Blue color
+			.setThumbnail(interaction.guild.iconURL())
+			.setTimestamp()
+			.setFooter({ text: 'Brents Super Helpful Bot' });
+
+		
 
         if (usersPlayedAfterLastAdvance.length === 0 && usersNotPlayed.length === 0) {
-            return await interaction.editReply('No users have played since the last advance and all users are up to date.');
-        } else {
-            let replyMessage = '';
+				return await interaction.editReply('No users have played since the last advance and all users are up to date.');
+			} else {
+				let replyMessage = '';
 
-            if (usersPlayedAfterLastAdvance.length > 0) {
-                replyMessage += `Users who have played since the last advance: ${usersPlayedAfterLastAdvance.join(', ')}`;
-            }
+				if (usersPlayedAfterLastAdvance.length > 0) {
+					embed.addFields({ 
+						name: "Played", 
+						value: '🟢 Played since the last advance: ' + usersPlayedAfterLastAdvance.map(id => `<@${id}>`).join(', ')
+					});
+				}
 
-            if (usersNotPlayed.length > 0) {
-                replyMessage += `\nUsers who haven't played since the last advance: ${usersNotPlayed.join(', ')}`;
-            }
+				if (usersNotPlayed.length > 0) {
+					embed.addFields({ 
+						name: "Not Played", 
+						value: '🔴 Not Played since the last advance: ' + usersNotPlayed.map(id => `<@${id}>`).join(', ')
+					});
+				}
 
-            return await interaction.editReply(replyMessage);
-        }
+				return await interaction.editReply({ embeds: [embed] });
+			}
+
     }
 };

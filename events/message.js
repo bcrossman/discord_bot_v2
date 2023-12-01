@@ -3,6 +3,9 @@ const { ChartJSNodeCanvas } = require('chartjs-node-canvas');
 const fs = require('fs');
 const path = require('path');
 const config = require('../config.json');
+const { Configuration, OpenAIApi } = require('openai');
+const configuration = new Configuration({apiKey:config.openaikey});
+const openai = new OpenAIApi(configuration);
 
 const filePath_bug = path.join(__dirname, '..', 'data', 'bug-states.json');
 const filePath_advance = path.join(__dirname, '..', 'data', 'advance-states.json');
@@ -285,6 +288,110 @@ module.exports = {
         });
     }
 }
+
+const excludedUserId = '1076250443207942207'; 
+
+if (/(\bsim\b)/i.test(message.content) && message.author.id !== excludedUserId) {
+    try {
+        const gifUrl = await getRandomGifUrl("The Sims"); // Updated keyword
+        if (gifUrl) {
+            await message.reply(gifUrl);
+        } else {
+            await message.reply({
+                content: "Didn't find a relevant GIF!",
+                ephemeral: true,
+            });
+        }
+    } catch (error) {
+        console.error(error);
+        await message.reply({
+            content: "Error occurred!",
+            ephemeral: true,
+        });
+    }
+}
+
+const triggerUserId = '1'; 
+
+async function generateSummary(text) {
+    const messages = [
+        {"role": "system", "content": "You are a snarky poster."},
+        //{"role": "assistant", "content": `The message you're replying to said: ${text}`},
+        {"role": "user", "content": "Please provide a snarky response to: ${text}`"}
+    ];
+
+    try {
+        const response = await openai.createChatCompletion({
+            model: "gpt-3.5-turbo",
+            messages: messages,
+        });
+
+        return response.data.choices[0].message.content;
+    } catch (error) {
+        console.error('Error occurred:', error.response.data.error);
+        throw error; // you can throw the error to be handled upstream
+    }
+}
+
+if (message.author.id === triggerUserId) {
+    try {
+        const summary = await generateSummary(message.content);
+        if (summary) {
+            await message.reply(summary);
+        } else {
+            await message.reply({
+                content: "Couldn't generate a summary!",
+                ephemeral: true,
+            });
+        }
+    } catch (error) {
+        console.error('Error occurred:', error);
+        await message.reply({
+            content: "Error occurred!",
+            ephemeral: true,
+        });
+    }
+}
+
+	if (message.content.toLowerCase() === 'go tom') {
+    try {
+        const gifUrl = await getRandomGifUrl("Honda car"); // Replace with your keyword
+        if (gifUrl) {
+            await message.reply(gifUrl);
+        } else {
+            await message.reply({
+                content: "Didn't work!",
+                ephemeral: true,
+            });
+        }
+    } catch (error) {
+        console.error(error);
+        await message.reply({
+            content: "Didn't work!",
+            ephemeral: true,
+        });
+    }
+}
+
+	if (message.content.toLowerCase() === 'go matt') {
+    try {
+        const gifUrl = await getRandomGifUrl("BMW car"); // Replace with your keyword
+        if (gifUrl) {
+            await message.reply(gifUrl);
+        } else {
+            await message.reply({
+                content: "Didn't work!",
+                ephemeral: true,
+            });
+        }
+    } catch (error) {
+        console.error(error);
+        await message.reply({
+            content: "Didn't work!",
+            ephemeral: true,
+        });
+    }
+}
 		
 		if (message.content.toLowerCase().includes('is madden out yet')) {
 			const currentDate = new Date();
@@ -366,7 +473,7 @@ module.exports = {
 		const last_advance = advances.length > 0 ? advances[advances.length - 1] : "1970-01-01T00:00:00.000Z";
 		const diffInMillis = new Date(this_advance) - new Date(last_advance);
 		const diffInHours = diffInMillis / (1000*60*60);
-		if (message.content === 'Advanced #official') {
+		if (message.content === 'Advanced #official' || message.content === 'advanced #official') {
 			try {
 			advances.push(this_advance);
 			

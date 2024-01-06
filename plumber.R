@@ -139,7 +139,7 @@ df <-
 #* @serializer png
 #* @get /plot
 function(api_provided) {
-  # api_provided = "Colts Micah Parsons (ROLB)"
+  # api_provided = "Raiders Anthony McFarland (HB)"
   api_provided <- gsub(pattern = "\\(|\\)", replacement = "", x = api_provided)
   cat(print(api_provided))
   

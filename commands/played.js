@@ -25,8 +25,9 @@ const userIds = [
     'bpro000',
     'peakhorizon4096',
     'coleman234dt',
-    'Bcrossman',
-    'tomilo31'
+	 'Bcrossman',
+    'tomilo31',
+    'basbasbasbas2'
 ];
 
 module.exports = {

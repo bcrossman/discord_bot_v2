@@ -109,7 +109,7 @@ async function generateSummary(text) {
 
     try {
         const response = await openai.createChatCompletion({
-            model: "gpt-4",
+            model: "GPT-4o",
             messages: messages,
         });
 

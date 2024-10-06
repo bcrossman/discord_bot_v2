@@ -18,15 +18,16 @@ function readJson(filePath) {
 }
 
 const userIds = [
-    // 'babobeavers',
+    'babobeavers',
     'hoxn8r',
     'bi3lo7',
-    // 'magicrat1980',
+    'magicrat1980',
     // 'bpro000',
     'peakhorizon4096',
     // 'coleman234dt',
-	 'Bcrossman',
-    // 'tomilo31',
+	// 'Bcrossman',
+	 'jacksonsheph',
+    //'tomilo31',
     'basbasbasbas2'
 ];
 

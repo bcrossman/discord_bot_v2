@@ -1,0 +1,112 @@
+Babson Madden League
+
+Welcome to the Babson Madden League, a fun CFM (Connected Franchise Mode) league currently being played on Madden 25 for XBox One X. The goal of the league is to come together and have fun as a group. We have an increasing number of rules to counteract EA’s growing incompetence. In general we are low-key and have a pretty simple philosophy: have fun, try your best to win, and if something feels like you are cheating the system, don’t do it. Below are some guidelines we have put in place.
+
+Team Selection
+Users may choose from any teams
+
+League Schedule
+Offseason Schedule
+First Season: 
+In the first week of preseason
+One total trade can be made
+It can be a trade block trade or your one unlimited trade
+Two free agency picks per team will be made using a serpentine draft.
+All Future Seasons
+At a predetermined time, the league will advance to the first week of free agency. At this time, the following may happen:
+Make one (and only one) unrestricted trade
+Make trade block trades
+Begin making offers on free agents
+After everyone has put in their bids, the league will advance week by week. If anyone outbids another human player, they must announce it in the Discord. There is no last-minute sniping.
+The league will then advance to the start of the draft.
+After the draft is completed, we will refer to the most recent Powerball numbers to determine which positions will be boosted or penalized in the next year's draft class.  The first three numbers of the Powerball drawing will all be positions that are boosted from "normal" to "strong". The last two numbers will be moved from "normal" to "weak". The powerball number will not have any impact. The number will give us the position based on the tab here called "Draft Class Adj". If the same position comes up twice it moves from "strong" to "strongest" or "weak" to "weakest"
+After the draft, the league will advance to preseason week one. At this point the following will become available:
+Teams that have one available to them can make an unrestricted trade
+Teams can pick up one and only one free agent. After we advance to preseason week 2 free agency will be fully open. Exception: If you need a player to be able to play week one due to roster minimums, you may sign a mediocre player (not on the top two pages of free agency)
+Advance occurs when everyone has played or 48 hours from last advance, whichever is sooner. 
+During preseason, advance will be when everyone has played or 24 hours from last advance, whichever is sooner.
+If only one team is left to play on a given week, any owner can request proof of life. If the player responds, he has 24 hours to play his game. If the player does not respond within four hours, the week will advance.
+With human matchups, if one owner tags another owner with a request to schedule, the other owner must respond within four hours. If there is no response, the first owner has the option (not required) to request an AutoPilot game as soon as they are the last human game of the week.
+In the playoffs, the top seed in each conference can force win any of the CPU-CPU matchups in their conference.
+When joining your selected team, you have to be a brand new head coach as opposed to becoming the existing coach of that team (meaning your talent tree with be reset)
+
+Roster
+All Abilities and X-Factors are turned on
+Dev trait regression has been turned off
+A team that is vacated due to the user winning the Super Bowl is off-limits for trades for 5 full seasons. This only applies to unlimited trades. Trade block offers and players made available are fair game.
+No human can ever switch to a formerly human team
+The trade setting will be set to “Hard”
+Two unrestricted trades may be made per season with the CPU. This can be done at any time during the year. It is granted when the league launches and then resets each time we advance to week one of the free agency period. They cannot be rolled over.
+Only one trade (of any kind) may be made per week
+Cannot re-trade anyone over 75 traded for in same season
+No trade finder
+Teams cannot put players over 80 on trade block
+First round picks may be traded
+The previous year’s Super Bowl winner forfeits their Unrestricted trades for the following season.
+A team that is vacated due to the user winning the Super Bowl is off-limits for trades for 5 full seasons. This only applies to unlimited trades. Trade block offers and players made available are fair game after one season.
+One restricted trade with CPU can be done per week (but not in the same week as your unrestricted trade). A restricted trade is when you receive offers to players that you have on the trade block, or you make offers to players that other teams have on the trade block. When making offers to players other teams have on a trade block, you cannot add other players or picks on their side.
+Trade Block Trades
+Teams must declare who is on the trade block in the trade block channel
+Teams are limited to three players at a time
+Trade block offers must be for someone who is currently listed
+Prior to accepting an offer, a screenshot must be shared showing the main franchise menu with the “Trade offer” highlighted to show the name of the player.
+The screenshot must be of the full screen, to include the week that we are currently in.
+If this is not completed, the trade must be reversed, which may include having to add back additional draft picks.
+Human to human trades are allowed.
+The trading cool down period for non-SB teams given up by humans is one year, but after the cool down, you may only use your unlimited trade to acquire ONE player from that team per season, no trade block deals allowed
+The Personnel Talent Tree (Trade and Contract upgrades) is banned.
+Weekly mini-games banned (except during bye week). Training camp allowed. Focus training up to 6 players allowed.
+No editing of players. Special attention is paid to changing positions of a player, do not do it. A player can play any position in depth chart, but you cannot change their position. An exception is left vs. right. You may swap a player from LE to RE, LG to RG, LT to RT, LOLB to ROLB and FS to SS. This can only be done one time. Another exception is position changes between OLBs and MLBs to simplify formation sub BS. 
+Practice Squads are protected, other teams cannot pick players from your practice squad (and vice versa)
+You can either reset a coordinator tree OR fire a coordinator, but not both in the same season
+Progressive fatigue is on.
+Playcalling
+On offense, there is a one play per game limit in the regular season. two per game in playoffs. 
+On defense, there is a cooldown period of 7 plays. Once a play is called, it cannot be called for another 7 plays.
+All custom playbooks are not allowed. You may choose any other playbook you like and switch as often as you like.
+Pre-Snap user-controlled motion is banned. This does not ban switching HB sides for blocking purposes (or fake block). It does not ban pre-programmed motion designed into the play (jet sweep or drive plays).
+Against humans, no game play restrictions (can use 5 wide, can use motion, can use playmaker).
+Playmaker is banned
+If a deep pass is completed due to broken coverage (not a 50:50 ball, not a good speed beat, not a short open swing pass) the defending team has the right to request details about the specific play that was called and the changes made at the line AFTER the game and the Offensive team must share to the best of their recollection. This is not to deter the play, rather, allow defenses to be more prepared and allow other teams the ability to find and try these plays.
+
+Gameplay
+We play on All-Pro with six minute quarters
+All preseason games are played with injuries off
+All games played (CPU or human) must be streamed via Twitch. For human-human matchups the home team will stream. If you would like assistance in setting up your Twitch and linking it to Xbox, please click here. You can then let everyone know your twitch handle in Discord.
+If your game disconnects mid-game, restart game and do your best to get it back to the same time and score. This applies to human and cpu games. If time does not allow, you can choose to sim instead.
+For Human vs Human games that go into overtime, the receiving team is NOT allowed to kick a FG on the first possession. This applies to all games, including postseason.
+Against the CPU in the regular season, you must attempt an extra point after any touchdown before the 4th quarter.
+Against CPU, you must punt on fourth down on your side of the field (your side of the 50 yard line) through 3 quarters. Exception: If losing you may go for it in the third quarter.
+Against humans, you never need to punt when trailing or in the 4th quarter.
+During your bye week, to stem the boredom and sadness, you can do the mini games for your players in the ‘weekly strategy’
+Any player who breaks a single season record (threshold is permanently set at existing real life records) for TDs or yards cannot play in that season's playoffs. They can never be traded.
+You must play at least 12 of your 17 regular season games to play in the playoffs
+If you're beating CPU by 17 or more, must play as hard game. (Gentleman's agreement to not let other team score.)
+As long as the team has a winning record, all CPU games must be played as “Hard Games”
+
+Definition of Hard Game
+No coaching adjustments allowed on both offense and defense
+No presnap adjustments allowed on both offense and defense
+A play can be flipped at the playcall screen but not at the line of scrimmage
+Only allowed to call the first two pages of suggested plays (6 plays) on both offense and defense
+The only exception is you are able to punt or kick a FG at any time
+Can run a 2-point conversion play only when it is one of the suggested plays. Can choose to kick extra point even if it is not suggested
+Banning of empty backfields is suspended for hard games
+These restrictions are lifted at 2:00 left in each half, as long as team is not winning by 17 or more points.
+
+Next Season Penalties
+An NFC team that wins a Super Bowl or appears in two Super Bowls will be promoted to the AFC and have to choose any AFC team
+Any member of the league that wins the super bowl must change teams to any team of their choice (that hasn't been previously human-controlled)
+Any member of the league that wins two super bowls must change teams. They may choose among three teams selected by the remaining members of the league
+In both cases:
+Your new team's cap penalties will not be cleared 
+You will switch teams after Free Agency period of that season
+If a player voluntarily switches teams, league majority vote is required for that player to switch conferences.
+Amendments
+At the end of each season there will be an opportunity to put forward amendments to this charter. The process will be as follows:
+At any time, amendments may be proposed using the Amendment Proposal Form
+Discussion will not happen until the last game of the regular season has been played. During the playoffs, discussion may occur as it relates to the amendments.
+At the Super Bowl, any amendment that has three sponsors (including the author) will go to a vote. 
+A user must have been in the league for a full season to vote on amendments
+
+Play fair, use common sense, and have fun!

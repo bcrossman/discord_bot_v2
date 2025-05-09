@@ -1,4 +1,5 @@
 const { Discord } = require('discord.js');
+
 const { ChartJSNodeCanvas } = require('chartjs-node-canvas');
 const fs = require('fs');
 const path = require('path');
@@ -12,6 +13,76 @@ const filePath_advance = path.join(__dirname, '..', 'data', 'advance-states.json
 const filePath_played = path.join(__dirname, '..', 'data', 'played-states.json');
 
 const axios = require("axios"); // Install Axios using npm install axios
+
+const csvParser = require('csv-parser');
+
+// TinyURL shortener
+async function shortenUrl(longUrl) {
+    const apiKey = config.tinyurlApiKey;
+    if (!apiKey) throw new Error('Missing tinyurlApiKey in config.json');
+    const axios = require('axios');
+    const response = await axios.post('https://api.tinyurl.com/create', {
+        url: longUrl,
+        domain: 'tinyurl.com'
+    }, {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${apiKey}`
+        }
+    });
+    return response.data.data.tiny_url;
+}
+
+// Helper to format the Discord post
+function formatFlightPostDiscord(row, urls) {
+    function stopsText(stops) {
+        if (stops === '0') return 'Nonstop';
+        if (stops === '1') return '1 stop';
+        return `${stops} stops`;
+    }
+    function formatDuration(hoursDecimal) {
+        const hours = Math.floor(hoursDecimal);
+        const minutes = Math.round((hoursDecimal - hours) * 60);
+        return `${hours}h${minutes > 0 ? minutes + 'm' : ''}`;
+    }
+    function formatSavings(price, avg, z_score) {
+        if (z_score !== '' && !isNaN(z_score) && Number(z_score) < -1 && avg && !isNaN(avg)) {
+            const savings = Math.round(Number(avg) - Number(price));
+            if (savings > 0) {
+                return ` (🔥 $${savings} below avg)`;
+            }
+        }
+        return '';
+    }
+    const AIRPORT_CITY_MAP = {
+      ATL: "Atlanta, GA", LAX: "Los Angeles, CA", DFW: "Dallas-Fort Worth, TX", DEN: "Denver, CO", ORD: "Chicago, IL", JFK: "New York, NY (JFK)", MCO: "Orlando, FL", LAS: "Las Vegas, NV", CLT: "Charlotte, NC", MIA: "Miami, FL", SEA: "Seattle, WA", EWR: "Newark, NJ", SFO: "San Francisco, CA", PHX: "Phoenix, AZ", IAH: "Houston, TX", FLL: "Fort Lauderdale, FL", MSP: "Minneapolis, MN", LGA: "New York, NY (LGA)", DTW: "Detroit, MI", BNA: "Nashville, TN", MSY: "New Orleans, LA", SAN: "San Diego, CA", AUS: "Austin, TX", PDX: "Portland, OR", HNL: "Honolulu, HI", TPA: "Tampa, FL", CHS: "Charleston, SC", SAV: "Savannah, GA", DCA: "Washington, DC", PWM: "Portland, ME", BOS: "Boston, MA", CUN: "Cancun, Mexico", MEX: "Mexico City, Mexico", SJU: "San Juan, Puerto Rico", PUJ: "Punta Cana, DR", MBJ: "Montego Bay, Jamaica", LHR: "London, UK (LHR)", IST: "Istanbul, Turkey", CDG: "Paris, France", AMS: "Amsterdam, Netherlands", MAD: "Madrid, Spain", FRA: "Frankfurt, Germany", BCN: "Barcelona, Spain", FCO: "Rome, Italy", LGW: "London, UK (LGW)", MUC: "Munich, Germany", LIS: "Lisbon, Portugal", DUB: "Dublin, Ireland", PMI: "Palma de Mallorca, Spain", ORY: "Paris, France (ORY)", ATH: "Athens, Greece", SYR: "Syracuse, NY", MHT: "Manchester, NH", PVD: "Providence, RI", BDL: "Hartford, CT"
+    };
+    const [origin, dest] = row['Origin_Destination'].split('-');
+    const stops = stopsText(row['Num Stops']);
+    const price = row['Price ($)'];
+    const duration = formatDuration(Number(row['Travel time']));
+    const savings = formatSavings(price, row['avg_price'], row['z_score']);
+    // Add city names if available
+    const originCity = AIRPORT_CITY_MAP[origin] || origin;
+    const destCity = AIRPORT_CITY_MAP[dest] || dest;
+    let post = `✈️ ${origin} → ${dest}\n`;
+    post += `(${originCity} - ${destCity})\n`;
+    if (urls.length === 2) {
+        post += `🪂 One-way (separate tickets)\n`;
+        post += `• Out: ${row['Outbound Departure date']}, ${row['Outbound Departure time']}\n`;
+        post += `• Back: ${row['Return Departure date']}, ${row['Return Departure time']}\n`;
+        post += `💸 $${price}${savings} | ${stops} | ${duration}\n`;
+        post += `Outbound:\n${urls[0]}\n`;
+        post += `Return:\n${urls[1]}\n`;
+    } else {
+        post += `🔁 Roundtrip\n`;
+        post += `🗓️ ${row['Departure date'] || row['Outbound Departure date']}, ${row['Departure time'] || row['Outbound Departure time']}\n`;
+        post += `💸 $${price}${savings} | ${stops} | ${duration}\n`;
+        post += `${urls[0]}\n`;
+    }
+    // Discord message limit is 2000 chars, but our posts are much shorter
+    return post;
+}
 
 async function getRandomGifUrl(keyword) {
     try {
@@ -150,8 +221,67 @@ function calculateAverageTimeBetweenAdvances(advances) {
 
 module.exports = {
     name: 'messageCreate',
-    execute: async function (message) {
-		if (message.content.toLowerCase() === 'gg') {
+    execute: async function execute(message) {
+        // Prevent the bot from responding to its own messages
+        if (message.author.bot) return;
+        // --- FLIGHT CSV POSTING LOGIC ---
+        try {
+            const fs = require('fs');
+            const path = require('path');
+            const goodFlightsDir = 'C:/Users/brent/OneDrive/Documents/GitHub/travel_bsky_bot/good_flights';
+            const channelId = '1359621649049194608';
+            const channel = message.client.channels.cache.get(channelId);
+            if (channel) {
+                const files = fs.readdirSync(goodFlightsDir).filter(f => f.endsWith('.csv'));
+                for (const file of files) {
+                    const absCsv = path.join(goodFlightsDir, file);
+                    const postedMarker = absCsv + '.bot_posted';
+                    if (fs.existsSync(postedMarker)) continue;
+                    // Mark as posted immediately to avoid reprocessing
+                    fs.writeFileSync(postedMarker, '');
+                    // Parse CSV and post for each row
+                    const rows = [];
+                    await new Promise((resolve, reject) => {
+                        fs.createReadStream(absCsv)
+                            .pipe(csvParser())
+                            .on('data', (row) => rows.push(row))
+                            .on('end', resolve)
+                            .on('error', reject);
+                    });
+                    let posted = false;
+                    for (const row of rows) {
+                        if (!row['Origin_Destination'] || !row['Price ($)'] || !row['url']) continue;
+                        const origUrls = row['url'].split(',').map(u => u.trim());
+                        let shortUrls = [];
+                        for (const url of origUrls) {
+                            try {
+                                shortUrls.push(await shortenUrl(url));
+                            } catch (e) {
+                                console.error('Failed to shorten URL:', url, e.message);
+                                shortUrls.push(url); // fallback to original if failed
+                            }
+                        }
+                        const postText = formatFlightPostDiscord(row, shortUrls);
+                        // Discord max message length is 2000 chars, but our posts are much shorter
+                        if (postText.length <= 2000) {
+                            await channel.send(postText);
+                            posted = true;
+                        }
+                    }
+                    if (posted) {
+                        fs.writeFileSync(postedMarker, '');
+                    }
+                }
+            }
+        } catch (err) {
+            console.error('Error posting flight deals:', err);
+        }
+        // --- END FLIGHT CSV POSTING LOGIC ---
+        // Prevent the bot from responding to its own messages
+        if (message.author.bot) return;
+
+
+        if (message.content.toLowerCase() === 'gg') {
     try {
         const gifUrl = await getRandomGifUrl("good game"); // Replace with your keyword
         if (gifUrl) {
@@ -311,25 +441,72 @@ if (/(\bsim\b)/i.test(message.content) && message.author.id !== excludedUserId) 
     }
 }
 
-const triggerUserId = '1'; 
+if (/(\bkicker\b)/i.test(message.content) && message.author.id !== excludedUserId) {
+    try {
+        const gifUrl = await getRandomGifUrl("kicker"); // Updated keyword
+        if (gifUrl) {
+            await message.reply(gifUrl);
+        } else {
+            await message.reply({
+                content: "Didn't find a relevant GIF!",
+                ephemeral: true,
+            });
+        }
+    } catch (error) {
+        console.error(error);
+        await message.reply({
+            content: "Error occurred!",
+            ephemeral: true,
+        });
+    }
+}
+
+if (/(\bhuge sack\b)/i.test(message.content) && message.author.id !== excludedUserId) {
+    try {
+        const gifUrl = await getRandomGifUrl("Huge sack"); // Updated keyword
+        if (gifUrl) {
+            await message.reply(gifUrl);
+        } else {
+            await message.reply({
+                content: "Didn't find a relevant GIF!",
+                ephemeral: true,
+            });
+        }
+    } catch (error) {
+        console.error(error);
+        await message.reply({
+            content: "Error occurred!",
+            ephemeral: true,
+        });
+    }
+}
+
+
+const triggerUserId = '3874244'; 
 
 async function generateSummary(text) {
     const messages = [
-        {"role": "system", "content": "You are a snarky poster."},
-        //{"role": "assistant", "content": `The message you're replying to said: ${text}`},
-        {"role": "user", "content": "Please provide a snarky response to: ${text}`"}
+        {
+            "role": "system", 
+            "content": "You are a snarky Discord commenter who always reminds Alex that he lost 4 Super Bowls in a row to Brent. Your responses should be short, witty, and reference this fact while also directly responding to Alex's message."
+        },
+        {
+            "role": "user", 
+            "content": `Alex just posted: "${text}". Generate a short, snarky response that both addresses his message and reminds him about losing 4 Super Bowls in a row to Brent.`
+        }
     ];
 
     try {
         const response = await openai.createChatCompletion({
-            model: "gpt-4",
+            model: "gpt-4.1-2025-04-14",
             messages: messages,
+            max_tokens: 150 // Keep responses brief
         });
 
         return response.data.choices[0].message.content;
     } catch (error) {
-        console.error('Error occurred:', error.response.data.error);
-        throw error; // you can throw the error to be handled upstream
+        console.error('Error occurred:', error);
+        return "Nice try, Alex. Maybe you'll have better luck with this than those 4 Super Bowls you lost to Brent.";
     }
 }
 

@@ -25,10 +25,10 @@ const userIds = [
     // 'bpro000',
     'peakhorizon4096',
     // 'coleman234dt',
-	// 'Bcrossman',
-	 'jacksonsheph',
+	'Bcrossman',
+	 'jacksonsheph'
     //'tomilo31',
-    'basbasbasbas2'
+    //'basbasbasbas2'
 ];
 
 module.exports = {

@@ -222,8 +222,43 @@ function calculateAverageTimeBetweenAdvances(advances) {
 module.exports = {
     name: 'messageCreate',
     execute: async function execute(message) {
-        // Prevent the bot from responding to its own messages
-        if (message.author.bot) return;
+    // Allow the 'is live over at' trigger to process even bot/webhook messages
+    if (message.content.toLowerCase().includes('is live over at')) {
+        try {
+            const playedStates = readStates(filePath_played);
+            const words = message.content.split(' ');
+            const phraseIndex = words.findIndex(word => word.toLowerCase() === 'is') - 1;
+            const authorKey = phraseIndex >= 0 ? words[phraseIndex] : '';
+            const times = playedStates[authorKey] ?? [];
+            const easternTime = message.createdAt.toLocaleString('en-US', { timeZone: 'America/New_York' });
+            times.push(easternTime);
+            playedStates[authorKey] = times;
+            writeStates(playedStates, filePath_played);
+            await sendBarChart(message, authorKey);
+            const imagePath = path.join(__dirname, '..', 'data', `chart.png`);
+            await message.channel.send({
+                files: [{
+                    attachment: imagePath,
+                    name: 'chart.png'
+                }]
+            });
+        } catch (error) {
+            console.error(error);
+            await message.reply({
+                content: "Didn't work!",
+                ephemeral: true,
+            });
+        }
+        // Do not return here; allow other logic to run for non-bot messages
+        if (!message.author.bot) {
+            // Continue to other logic for non-bot messages
+        } else {
+            // For bot/webhook messages, skip the rest of the logic
+            return;
+        }
+    }
+    // Prevent the bot from responding to its own messages
+    if (message.author.bot) return;
         // --- FLIGHT CSV POSTING LOGIC ---
         try {
             const fs = require('fs');

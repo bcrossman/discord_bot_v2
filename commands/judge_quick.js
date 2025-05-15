@@ -3,9 +3,8 @@ const fs = require('fs');
 const path = require('path');
 const { setTimeout } = require('timers/promises');
 const config = require('../config.json');
-const { Configuration, OpenAIApi } = require('openai');
-const configuration = new Configuration({ apiKey: config.openaikey });
-const openai = new OpenAIApi(configuration);
+const OpenAI = require('openai');
+const openai = new OpenAI({ apiKey: config.openaikey });
 
 // Path to your rules file
 const rulesFilePath = path.join(__dirname, '..', 'data', 'league_rules.txt');
@@ -63,14 +62,18 @@ async function getRuling(question, rules) {
     ];
 
     return callWithRetry(async () => {
-        const response = await openai.createChatCompletion({
+        const response = await openai.chat.completions.create({
             model: "gpt-4.1-nano-2025-04-14",
             messages: messages,
             temperature: 0.3, // Lower temperature for more consistent rulings
             max_tokens: 250,
         });
 
-        return response.data.choices[0].message.content;
+        if (!response || !response.choices || !response.choices[0]) {
+            throw new Error('Invalid response from OpenAI');
+        }
+
+        return response.choices[0].message.content;
     });
 }
 

@@ -3,9 +3,8 @@ const fs = require('fs');
 const path = require('path');
 const { setTimeout } = require('timers/promises');
 const config = require('../config.json');
-const { Configuration, OpenAIApi } = require('openai');
-const configuration = new Configuration({ apiKey: config.openaikey });
-const openai = new OpenAIApi(configuration);
+const OpenAI = require('openai');
+const openai = new OpenAI({ apiKey: config.openaikey });
 
 // Path to your rules file
 const rulesFilePath = path.join(__dirname, '..', 'data', 'league_rules.txt');
@@ -76,7 +75,7 @@ async function getRuling(question, rules, messages) {
         try {
             const content = await callWithRetry(async () => {
                 console.log('[DEBUG] Sending request to OpenAI API');
-                const response = await openai.createChatCompletion({
+                const response = await openai.chat.completions.create({
                     model: "o3-mini-2025-01-31",
                     messages: messages,
                     max_completion_tokens: 2000
@@ -84,14 +83,14 @@ async function getRuling(question, rules, messages) {
                 
                 console.log('[DEBUG] Received response from OpenAI API');
                 console.log('[DEBUG] Response status:', response.status);
-                console.log('[DEBUG] Response data structure:', Object.keys(response.data));
+                console.log('[DEBUG] Response structure:', Object.keys(response));
                 
-                if (!response.data || !response.data.choices || !response.data.choices[0]) {
+                if (!response || !response.choices || !response.choices[0]) {
                     console.error('[DEBUG] Invalid response structure:', JSON.stringify(response.data));
                     throw new Error('Invalid API response structure');
                 }
                 
-                const content = response.data.choices[0].message.content;
+                const content = response.choices[0].message.content;
                 console.log(`[DEBUG] Response content length: ${content ? content.length : 0}`);
                 console.log(`[DEBUG] First 100 chars of response: ${content ? content.substring(0, 100) : 'NULL'}`);
                 
@@ -223,7 +222,7 @@ module.exports = {
                     // Use the same messages but with the GPT-4o-mini model
                     const fallbackResult = await callWithRetry(async () => {
                         console.log('[DEBUG] Sending fallback request to GPT-4o-mini');
-                        const response = await openai.createChatCompletion({
+                        const response = await openai.chat.completions.create({
                             model: "gpt-4o-mini-2024-07-18",
                             messages: messages, // Now messages is properly in scope
                             temperature: 0.3,   // Lower temperature for more consistent rulings
@@ -232,12 +231,12 @@ module.exports = {
                         
                         console.log('[DEBUG] Received GPT-4o-mini response');
                         
-                        if (!response.data || !response.data.choices || !response.data.choices[0]) {
+                        if (!response || !response.choices || !response.choices[0]) {
                             console.error('[DEBUG] Invalid fallback response structure:', JSON.stringify(response.data));
                             throw new Error('Invalid fallback API response structure');
                         }
                         
-                        const content = response.data.choices[0].message.content;
+                        const content = response.choices[0].message.content;
                         console.log(`[DEBUG] Fallback response content length: ${content ? content.length : 0}`);
                         
                         if (!content || content.trim() === '') {

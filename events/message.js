@@ -4,9 +4,8 @@ const { ChartJSNodeCanvas } = require('chartjs-node-canvas');
 const fs = require('fs');
 const path = require('path');
 const config = require('../config.json');
-const { Configuration, OpenAIApi } = require('openai');
-const configuration = new Configuration({apiKey:config.openaikey});
-const openai = new OpenAIApi(configuration);
+const OpenAI = require('openai');
+const openai = new OpenAI({ apiKey: config.openaikey });
 
 const filePath_bug = path.join(__dirname, '..', 'data', 'bug-states.json');
 const filePath_advance = path.join(__dirname, '..', 'data', 'advance-states.json');
@@ -35,6 +34,7 @@ async function shortenUrl(longUrl) {
 
 // Helper to format the Discord post
 function formatFlightPostDiscord(row, urls) {
+    console.log('Flight row:', row);
     function stopsText(stops) {
         if (stops === '0') return 'Nonstop';
         if (stops === '1') return '1 stop';
@@ -46,8 +46,11 @@ function formatFlightPostDiscord(row, urls) {
         return `${hours}h${minutes > 0 ? minutes + 'm' : ''}`;
     }
     function formatSavings(price, avg, z_score) {
-        if (z_score !== '' && !isNaN(z_score) && Number(z_score) < -1 && avg && !isNaN(avg)) {
-            const savings = Math.round(Number(avg) - Number(price));
+        const p = Number(String(price).trim());
+        const a = Number(String(avg).trim());
+        const z = Number(String(z_score).trim());
+        if (z_score !== '' && !isNaN(z) && z < -1 && avg && !isNaN(a)) {
+            const savings = Math.round(a - p);
             if (savings > 0) {
                 return ` (🔥 $${savings} below avg)`;
             }
@@ -61,7 +64,7 @@ function formatFlightPostDiscord(row, urls) {
     const stops = stopsText(row['Num Stops']);
     const price = row['Price ($)'];
     const duration = formatDuration(Number(row['Travel time']));
-    const savings = formatSavings(price, row['avg_price'], row['z_score']);
+    const savings = formatSavings(price, row['mean_price'], row['z_score']);
     // Add city names if available
     const originCity = AIRPORT_CITY_MAP[origin] || origin;
     const destCity = AIRPORT_CITY_MAP[dest] || dest;
@@ -532,13 +535,17 @@ async function generateSummary(text) {
     ];
 
     try {
-        const response = await openai.createChatCompletion({
+        const response = await openai.chat.completions.create({
             model: "gpt-4.1-2025-04-14",
             messages: messages,
             max_tokens: 150 // Keep responses brief
         });
 
-        return response.data.choices[0].message.content;
+        if (!response || !response.choices || !response.choices[0]) {
+            throw new Error('Invalid response from OpenAI');
+        }
+
+        return response.choices[0].message.content;
     } catch (error) {
         console.error('Error occurred:', error);
         return "Nice try, Alex. Maybe you'll have better luck with this than those 4 Super Bowls you lost to Brent.";

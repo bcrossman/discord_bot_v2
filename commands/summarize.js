@@ -4,9 +4,8 @@ const utc = require('dayjs/plugin/utc');
 const { setTimeout } = require('timers/promises');
 dayjs.extend(utc);
 const config = require('../config.json');
-const { Configuration, OpenAIApi } = require('openai');
-const configuration = new Configuration({apiKey:config.openaikey});
-const openai = new OpenAIApi(configuration);
+const OpenAI = require('openai');
+const openai = new OpenAI({ apiKey: config.openaikey });
 
 // Simple in-memory cache for recent summaries
 const summaryCache = new Map();
@@ -263,14 +262,17 @@ async function generateSummary(text) {
     ];
 
     return callWithRetry(async () => {
-        const response = await openai.createChatCompletion({
+        const response = await openai.chat.completions.create({
             model: "gpt-4.5-preview-2025-02-27", // Consider using a faster model
             messages: messages,
             temperature: 0.7,
             max_tokens: 2000,
         });
 
-        return response.data.choices[0].message.content;
+        if (!response || !response.choices || !response.choices[0]) {
+            throw new Error('Invalid OpenAI response. Please check the API status and try again.');
+        }
+        return response.choices[0].message.content;
     });
 }
 

@@ -263,10 +263,9 @@ async function generateSummary(text) {
 
     return callWithRetry(async () => {
         const response = await openai.chat.completions.create({
-            model: "gpt-4.5-preview-2025-02-27", // Consider using a faster model
+            model: "o4-mini-2025-04-16",
             messages: messages,
-            temperature: 0.7,
-            max_tokens: 2000,
+            max_completion_tokens: 2000,
         });
 
         if (!response || !response.choices || !response.choices[0]) {

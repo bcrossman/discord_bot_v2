@@ -57,23 +57,23 @@ async function getRuling(question, rules) {
         },
         {
             role: "user", 
-            content: `LEAGUE RULES:\n\n${rules}\n\nQUESTION REQUIRING A RULING:\n${question}\n\nPlease provide a ruling on this question based on the league rules provided. If you need more information to make a fair ruling, specify exactly what details are missing.`
+            content: `LEAGUE RULES:\n\n${rules}\n\nQUESTION REQUIRING A RULING:\n${question}\n\nPlease provide a ruling on this question based on the league rules provided. Please provide the relevant sections to support the ruling. If you need more information to make a fair ruling, specify exactly what details are missing.`
         }
     ];
 
     return callWithRetry(async () => {
         const response = await openai.chat.completions.create({
-            model: "gpt-4.1-2025-04-14",
+            model: "o4-mini-2025-04-16",
             messages: messages,
-            temperature: 0.3, // Lower temperature for more consistent rulings
-            max_tokens: 250,
+            max_completion_tokens: 8000,
         });
+        console.log('OpenAI API response:', JSON.stringify(response, null, 2));
 
-        if (!response || !response.choices || !response.choices[0]) {
-            throw new Error('Invalid response from OpenAI API');
+        if (!response || !response.choices || !response.choices[0] || !response.choices[0].message || !response.choices[0].message.content) {
+            return 'Sorry, I was unable to generate a ruling. Please check the rules or try again.';
         }
 
-        return response.choices[0].message.content;
+        return response.choices[0].message.content || 'Sorry, I was unable to generate a ruling. Please check the rules or try again.';
     });
 }
 
